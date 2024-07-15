@@ -13,5 +13,6 @@ func init(){
 func main(){
 	router := gin.Default()
 	routes.InitRoutes(router)
+	
 	router.Run()
 }
