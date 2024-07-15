@@ -26,6 +26,5 @@ func ConnectDB(){
 
 	if DATABASE != nil{
 		fmt.Println("Database connected succesfully")
-		fmt.Println(DATABASE)
 	}
 }
