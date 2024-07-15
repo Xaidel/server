@@ -6,5 +6,5 @@ import (
 )
 
 func InitRoutes(router *gin.Engine){
-	router.GET("/", controllers.GET)
+	router.GET("/users", controllers.GET)
 }
