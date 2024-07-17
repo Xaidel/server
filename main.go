@@ -11,8 +11,9 @@ func init(){
 }
 
 func main(){
-	router := gin.Default()
+	router := gin.New()
+	router.Use(gin.Logger())
+	router.Use(gin.Recovery())
 	routes.InitRoutes(router)
-	
 	router.Run()
 }
