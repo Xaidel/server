@@ -7,11 +7,13 @@ import (
 )
 
 func InitRoutes(router *gin.Engine) {
-	api := router.Group("/api")
+	api := router.Group("/api/v1")
 	{
-		v1 := api.Group("/v1")
+		user := api.Group("/users")
 		{
-			v1.GET("/users", controllers.GET)
+			user.GET("/", controllers.GetUsers)
+			user.GET("/:id", controllers.GetUser)
+			user.POST("/", controllers.PostUser)
 		}
 	}
 }

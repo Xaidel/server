@@ -1,8 +1,8 @@
 package models
 
-type User struct{
-	ID uint
-	username uint
-	password string
-	account_type uint
+type User struct {
+	ID          uint
+	Username    uint
+	Password    string
+	AccountType uint
 }

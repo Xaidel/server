@@ -16,5 +16,7 @@ func main() {
 	err := inits.DATABASE.AutoMigrate(&models.User{})
 	if err != nil {
 		fmt.Println("Error Migrating!!")
+		return
 	}
+	fmt.Println("Models Successfully Migrated!!")
 }
