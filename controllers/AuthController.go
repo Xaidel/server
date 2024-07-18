@@ -4,39 +4,62 @@ import (
 	"csprobe/server/inits"
 	"csprobe/server/models"
 	"csprobe/server/service"
-	"errors"
 	"net/http"
+	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 func Login(context *gin.Context) {
-	// Define request body struct
 	var reqBody struct {
-		Username uint   `json:"username" binding:"required"`
-		Password string `json:"password" binding:"required"`
+		Username uint
+		Password string
 	}
 
-	if err := context.BindJSON(&reqBody); err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if context.Bind(&reqBody) != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "Bad Request",
+		})
 		return
 	}
 
 	var user models.User
-	if err := inits.DATABASE.Where("username = ?", reqBody.Username).First(&user).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			context.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
-		} else {
-			context.JSON(http.StatusInternalServerError, gin.H{"error": "Database Error"})
-		}
+
+	inits.DATABASE.First(&user, "username = ?", reqBody.Username)
+
+	if user.ID == 0 {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid username",
+		})
 		return
 	}
 
 	if !service.Decrypt(reqBody.Password, user.Password) {
-		context.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid Password"})
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid Password",
+		})
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"user": user})
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub": user.ID,
+		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
+	})
+
+	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Failed to generate a token",
+		})
+		return
+	}
+
+	context.SetSameSite(http.SameSiteLaxMode)
+	context.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
+
+	context.JSON(http.StatusOK, gin.H{})
+
 }

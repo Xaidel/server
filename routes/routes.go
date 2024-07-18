@@ -2,6 +2,7 @@ package routes
 
 import (
 	"csprobe/server/controllers"
+	"csprobe/server/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,7 +18,7 @@ func InitRoutes(router *gin.Engine) {
 
 		user := api.Group("/users")
 		{
-			user.GET("/", controllers.GetUsers)
+			user.GET("/", middleware.Authenticate, controllers.GetUsers)
 			user.GET("/:id", controllers.GetUser)
 			user.POST("/", controllers.PostUser)
 		}
