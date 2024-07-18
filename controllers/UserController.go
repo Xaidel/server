@@ -3,6 +3,7 @@ package controllers
 import (
 	"csprobe/server/inits"
 	"csprobe/server/models"
+	"csprobe/server/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -33,7 +34,12 @@ func PostUser(context *gin.Context) {
 		Password string
 	}
 	context.Bind(&reqBody)
-	user := models.User{Username: reqBody.Username, Password: reqBody.Password}
+	hashedPassword, err := service.Encrypt(reqBody.Password)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to Hash the given password"})
+		return
+	}
+	user := models.User{Username: reqBody.Username, Password: hashedPassword}
 	if result := inits.DATABASE.Create(&user); result.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		return
