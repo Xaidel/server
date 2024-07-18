@@ -10,7 +10,6 @@ import (
 func InitRoutes(router *gin.Engine) {
 	api := router.Group("/api/v1")
 	{
-
 		auth := api.Group("/auth")
 		{
 			auth.POST("/login", controllers.Login)
@@ -21,6 +20,7 @@ func InitRoutes(router *gin.Engine) {
 			user.GET("/", middleware.Authenticate, controllers.GetUsers)
 			user.GET("/:id", controllers.GetUser)
 			user.POST("/", controllers.PostUser)
+			user.DELETE("/:id", controllers.DeleteUser)
 		}
 	}
 }

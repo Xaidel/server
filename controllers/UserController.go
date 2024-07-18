@@ -47,3 +47,15 @@ func PostUser(context *gin.Context) {
 
 	context.JSON(http.StatusCreated, user)
 }
+
+func DeleteUser(context *gin.Context) {
+	id := context.Param("id")
+	if err := inits.DATABASE.Delete(&models.User{}, id).Error; err != nil {
+		context.JSON(http.StatusNotFound, gin.H{
+			"error": "User does not exist",
+		})
+		return
+	}
+
+	context.JSON(http.StatusNoContent, gin.H{})
+}
