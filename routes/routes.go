@@ -25,5 +25,14 @@ func InitRoutes(router *gin.Engine) {
 			user.POST("/", controller.User.PostUser)
 			user.DELETE("/:id", controller.User.DeleteUser)
 		}
+
+    curriculum := api.Group("/curriculums")
+    {
+      curriculum.GET("/", middleware.Authenticate, controller.Curriculum.GET)
+      curriculum.GET("/:id", middleware.Authenticate, controller.Curriculum.GET)
+      curriculum.POST("/", middleware.Authenticate, controller.Curriculum.POST)
+      curriculum.DELETE("/:id", middleware.Authenticate, controller.Curriculum.DELETE)
+    }
+
 	}
 }
