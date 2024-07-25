@@ -9,7 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetUsers(context *gin.Context) {
+type UserController struct{}
+
+func (c *UserController) GetUsers(context *gin.Context) {
 	var users []models.User
 	if result := inits.DATABASE.Find(&users); result.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
@@ -18,7 +20,7 @@ func GetUsers(context *gin.Context) {
 	context.JSON(http.StatusOK, users)
 }
 
-func GetUser(context *gin.Context) {
+func (c *UserController) GetUser(context *gin.Context) {
 	id := context.Param("id")
 	var user models.User
 	if err := inits.DATABASE.First(&user, id).Error; err != nil {
@@ -28,7 +30,7 @@ func GetUser(context *gin.Context) {
 	context.JSON(http.StatusOK, user)
 }
 
-func PostUser(context *gin.Context) {
+func (c *UserController) PostUser(context *gin.Context) {
 	var reqBody struct {
 		Username uint
 		Password string
@@ -48,7 +50,7 @@ func PostUser(context *gin.Context) {
 	context.JSON(http.StatusCreated, user)
 }
 
-func DeleteUser(context *gin.Context) {
+func (c *UserController) DeleteUser(context *gin.Context) {
 	id := context.Param("id")
 	if err := inits.DATABASE.Delete(&models.User{}, id).Error; err != nil {
 		context.JSON(http.StatusNotFound, gin.H{

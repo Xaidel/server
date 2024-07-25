@@ -12,7 +12,9 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-func Login(context *gin.Context) {
+type AuthController struct{}
+
+func (auth *AuthController)Login(context *gin.Context) {
 	var reqBody struct {
 		Username uint
 		Password string

@@ -8,19 +8,22 @@ import (
 )
 
 func InitRoutes(router *gin.Engine) {
+
+  controller := &controllers.Controller{}
+
 	api := router.Group("/api/v1")
 	{
 		auth := api.Group("/auth")
 		{
-			auth.POST("/login", controllers.Login)
+			auth.POST("/login", controller.Auth.Login)
 		}
 
 		user := api.Group("/users")
 		{
-			user.GET("/", middleware.Authenticate, controllers.GetUsers)
-			user.GET("/:id", controllers.GetUser)
-			user.POST("/", controllers.PostUser)
-			user.DELETE("/:id", controllers.DeleteUser)
+			user.GET("/", middleware.Authenticate, controller.User.GetUsers)
+			user.GET("/:id", controller.User.GetUser)
+			user.POST("/", controller.User.PostUser)
+			user.DELETE("/:id", controller.User.DeleteUser)
 		}
 	}
 }
