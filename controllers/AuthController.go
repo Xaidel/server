@@ -14,7 +14,7 @@ import (
 
 type AuthController struct{}
 
-func (auth *AuthController)Login(context *gin.Context) {
+func (auth *AuthController) Login(context *gin.Context) {
 	var reqBody struct {
 		Username uint
 		Password string

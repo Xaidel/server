@@ -9,7 +9,7 @@ import (
 
 func InitRoutes(router *gin.Engine) {
 
-  controller := &controllers.Controller{}
+	controller := &controllers.Controller{}
 
 	api := router.Group("/api/v1")
 	{
@@ -20,19 +20,19 @@ func InitRoutes(router *gin.Engine) {
 
 		user := api.Group("/users")
 		{
-			user.GET("/", middleware.Authenticate, controller.User.GetUsers)
-			user.GET("/:id", controller.User.GetUser)
-			user.POST("/", controller.User.PostUser)
-			user.DELETE("/:id", controller.User.DeleteUser)
+			user.GET("/", middleware.Authenticate, controller.User.GET)
+			user.GET("/:id", middleware.Authenticate, controller.User.GET)
+			user.POST("/", middleware.Authenticate, controller.User.POST)
+			user.DELETE("/:id", middleware.Authenticate, controller.User.DELETE)
 		}
 
-    curriculum := api.Group("/curriculums")
-    {
-      curriculum.GET("/", middleware.Authenticate, controller.Curriculum.GET)
-      curriculum.GET("/:id", middleware.Authenticate, controller.Curriculum.GET)
-      curriculum.POST("/", middleware.Authenticate, controller.Curriculum.POST)
-      curriculum.DELETE("/:id", middleware.Authenticate, controller.Curriculum.DELETE)
-    }
+		curriculum := api.Group("/curriculums")
+		{
+			curriculum.GET("/", middleware.Authenticate, controller.Curriculum.GET)
+			curriculum.GET("/:id", middleware.Authenticate, controller.Curriculum.GET)
+			curriculum.POST("/", middleware.Authenticate, controller.Curriculum.POST)
+			curriculum.DELETE("/:id", middleware.Authenticate, controller.Curriculum.DELETE)
+		}
 
 	}
 }

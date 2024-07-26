@@ -11,26 +11,27 @@ import (
 
 type UserController struct{}
 
-func (c *UserController) GetUsers(context *gin.Context) {
-	var users []models.User
-	if result := inits.DATABASE.Find(&users); result.Error != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{
-			"error": result.Error.Error()})
-	}
-	context.JSON(http.StatusOK, users)
+func (c *UserController) GET(context *gin.Context){
+  id := context.Param("id")
+  if id != "" {
+    var user models.User
+    if err := inits.DATABASE.First(&user, id).Error; err != nil{
+      context.JSON(http.StatusNotFound, gin.H{"error": "User Not Found"})
+      return
+    }
+    context.JSON(http.StatusOK, user)
+  } else {
+    var users []models.User
+    if result := inits.DATABASE.Find(&users); result.Error != nil{
+      context.JSON(http.StatusNotFound, gin.H{"error": result.Error.Error()})
+      return
+    }
+    context.JSON(http.StatusOK, users)
+  }
+
 }
 
-func (c *UserController) GetUser(context *gin.Context) {
-	id := context.Param("id")
-	var user models.User
-	if err := inits.DATABASE.First(&user, id).Error; err != nil {
-		context.JSON(http.StatusNotFound, gin.H{"error": "User does not exist"})
-		return
-	}
-	context.JSON(http.StatusOK, user)
-}
-
-func (c *UserController) PostUser(context *gin.Context) {
+func (c *UserController) POST(context *gin.Context) {
 	var reqBody struct {
 		Username uint
 		Password string
@@ -50,7 +51,7 @@ func (c *UserController) PostUser(context *gin.Context) {
 	context.JSON(http.StatusCreated, user)
 }
 
-func (c *UserController) DeleteUser(context *gin.Context) {
+func (c *UserController) DELETE(context *gin.Context) {
 	id := context.Param("id")
 	if err := inits.DATABASE.Delete(&models.User{}, id).Error; err != nil {
 		context.JSON(http.StatusNotFound, gin.H{
