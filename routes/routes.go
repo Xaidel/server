@@ -22,7 +22,7 @@ func InitRoutes(router *gin.Engine) {
 		{
 			user.GET("/", middleware.Authenticate, controller.User.GET)
 			user.GET("/:id", middleware.Authenticate, controller.User.GET)
-			user.POST("/", middleware.Authenticate, controller.User.POST)
+			user.POST("/", controller.User.POST)
 			user.DELETE("/:id", middleware.Authenticate, controller.User.DELETE)
 		}
 

@@ -13,7 +13,7 @@ func init() {
 }
 
 func main() {
-	err := inits.DATABASE.AutoMigrate(&models.User{}, &models.Curriculum{})
+	err := inits.DATABASE.AutoMigrate(&models.User{}, &models.Curriculum{}, &models.Course{})
 	if err != nil {
 		fmt.Println("Error Migrating!!")
 		return
