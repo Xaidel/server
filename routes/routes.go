@@ -34,5 +34,13 @@ func InitRoutes(router *gin.Engine) {
 			curriculum.DELETE("/:id", middleware.Authenticate, controller.Curriculum.DELETE)
 		}
 
+    course := api.Group("/courses")
+    {
+      course.GET("/", middleware.Authenticate, controller.Course.GET)
+      course.GET("/:id", middleware.Authenticate, controller.Course.GET)
+      course.POST("/", middleware.Authenticate, controller.Course.POST)
+      course.DELETE("/:id", middleware.Authenticate,controller.Course.DELETE)
+    }
+
 	}
 }
