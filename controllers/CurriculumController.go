@@ -33,7 +33,7 @@ func (c *CurriculumController) GET(context *gin.Context) {
 func (c *CurriculumController) POST(context *gin.Context) {
 	var reqBody struct {
 		ID              string
-    Program_Code    string
+		Program_Code    string
 		Revision_Number uint
 		Effectivity_Sem uint
 		Effectivity_SY  uint
@@ -44,7 +44,7 @@ func (c *CurriculumController) POST(context *gin.Context) {
 	context.Bind(&reqBody)
 	curriculum := models.Curriculum{
 		ID:              reqBody.ID,
-    Program_Code:    reqBody.Program_Code,
+		Program_Code:    reqBody.Program_Code,
 		Revision_Number: reqBody.Revision_Number,
 		Effectivity_Sem: reqBody.Effectivity_Sem,
 		Effectivity_SY:  reqBody.Effectivity_SY,

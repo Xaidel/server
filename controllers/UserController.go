@@ -11,23 +11,23 @@ import (
 
 type UserController struct{}
 
-func (c *UserController) GET(context *gin.Context){
-  id := context.Param("id")
-  if id != "" {
-    var user models.User
-    if err := inits.DATABASE.First(&user, id).Error; err != nil{
-      context.JSON(http.StatusNotFound, gin.H{"error": "User Not Found"})
-      return
-    }
-    context.JSON(http.StatusOK, user)
-  } else {
-    var users []models.User
-    if result := inits.DATABASE.Find(&users); result.Error != nil{
-      context.JSON(http.StatusNotFound, gin.H{"error": result.Error.Error()})
-      return
-    }
-    context.JSON(http.StatusOK, users)
-  }
+func (c *UserController) GET(context *gin.Context) {
+	id := context.Param("id")
+	if id != "" {
+		var user models.User
+		if err := inits.DATABASE.First(&user, id).Error; err != nil {
+			context.JSON(http.StatusNotFound, gin.H{"error": "User Not Found"})
+			return
+		}
+		context.JSON(http.StatusOK, user)
+	} else {
+		var users []models.User
+		if result := inits.DATABASE.Find(&users); result.Error != nil {
+			context.JSON(http.StatusNotFound, gin.H{"error": result.Error.Error()})
+			return
+		}
+		context.JSON(http.StatusOK, users)
+	}
 
 }
 

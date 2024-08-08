@@ -4,5 +4,5 @@ type Controller struct {
 	Auth       *AuthController
 	User       *UserController
 	Curriculum *CurriculumController
-  Course *CourseController
+	Course     *CourseController
 }
